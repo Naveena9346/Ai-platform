@@ -15,8 +15,14 @@ exclude = ["alembic/"]
 
 [tool.pytest.ini_options]
 minversion = "7.0"
-addopts = "-ra -q --cov=app --cov-report=term-missing"
+addopts = "-ra -q"
+pythonpath = [
+    ".",
+    "app"
+]
 testpaths = [
     "tests",
 ]
+
 asyncio_mode = "auto"
+
