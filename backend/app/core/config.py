@@ -17,8 +17,9 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
     ALGORITHM: str = "HS256"
 
-    # Database
-    DATABASE_URL: str = "postgresql+asyncpg://dataquest_user:dataquest_password@localhost:5432/dataquest_db"
+    # Database (Default to SQLite for standalone local run, PostgreSQL in Docker)
+    DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///./dataquest.db")
+
 
     # Cache
     REDIS_URL: str = "redis://localhost:6379/0"
