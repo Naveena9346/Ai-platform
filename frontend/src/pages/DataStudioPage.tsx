@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Upload, Table, FileText, Search, Plus, Filter, CheckCircle2, ChevronRight } from 'lucide-react';
+import { Upload, Table, FileText, Search } from 'lucide-react';
 import { datasetsApi } from '../services/api';
 import { Dataset } from '../types';
 

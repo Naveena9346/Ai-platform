@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Play, Award, Brain, Settings, Sparkles, CheckCircle2, ChevronRight } from 'lucide-react';
+import { Play, Award, Settings } from 'lucide-react';
 import { datasetsApi, mlApi } from '../services/api';
 import { Dataset, MLModel } from '../types';
 

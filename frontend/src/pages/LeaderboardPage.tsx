@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Crown, Trophy, Search, Shield, Award } from 'lucide-react';
+import { Crown, Search, Shield, Award } from 'lucide-react';
 import { gamificationApi } from '../services/api';
 import { LeaderboardEntry } from '../types';
 
