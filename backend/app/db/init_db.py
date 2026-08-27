@@ -5,6 +5,7 @@ from app.models.user import User
 from app.models.gamification import UserGamificationProfile
 from app.models.quest import Quest
 from app.core.security import get_password_hash
+from app.db.seed_datasets import seed_user_datasets
 
 
 async def init_db(db: AsyncSession) -> None:
@@ -33,6 +34,10 @@ async def init_db(db: AsyncSession) -> None:
             equipped_title="ML Apprentice"
         )
         db.add(profile)
+        await db.commit()
+
+    # Seed sample datasets for demo user
+    await seed_user_datasets(db, user.id)
 
     # Check if quests exist
     quest_result = await db.execute(select(Quest))

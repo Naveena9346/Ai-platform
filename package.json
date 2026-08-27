@@ -1,0 +1,14 @@
+{
+  "name": "dataquest-ai-root",
+  "version": "1.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "description": "DataQuest AI: Gamified Enterprise Machine Learning Platform",
+  "scripts": {
+    "start": "python main.py",
+    "dev": "python main.py --reload",
+    "build": "cd frontend && npm run build",
+    "test": "cd backend && python -m pytest",
+    "install:all": "cd frontend && npm install && cd ../backend && pip install -r requirements.txt"
+  }
+}
