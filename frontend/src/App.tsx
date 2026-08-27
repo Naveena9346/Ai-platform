@@ -35,7 +35,24 @@ export const App: React.FC = () => {
 
     try {
       if (isRegisterMode) {
-        await authApi.register({ username, email, password });
+        try {
+          await authApi.register({ username, email, password });
+        } catch (regErr: any) {
+          const detail = regErr?.response?.data?.detail;
+          if (detail && typeof detail === 'string' && detail.toLowerCase().includes('already exists')) {
+            // Account exists; attempt seamless login directly
+            try {
+              const res = await authApi.login(username, password);
+              const userRes = await authApi.getMe();
+              setAuth(userRes.data, res.data.access_token);
+              return;
+            } catch {
+              setErrorMessage("This account already exists! Switch to the 'Sign In' tab above to log in.");
+              return;
+            }
+          }
+          throw regErr;
+        }
         const res = await authApi.login(username, password);
         const userRes = await authApi.getMe();
         setAuth(userRes.data, res.data.access_token);
@@ -45,7 +62,14 @@ export const App: React.FC = () => {
         setAuth(userRes.data, res.data.access_token);
       }
     } catch (err: any) {
-      setErrorMessage(err?.response?.data?.detail || 'Authentication failed. Please check credentials.');
+      const detail = err?.response?.data?.detail;
+      if (typeof detail === 'string') {
+        setErrorMessage(detail);
+      } else if (Array.isArray(detail) && detail.length > 0) {
+        setErrorMessage(detail[0]?.msg || 'Validation failed. Please check inputs.');
+      } else {
+        setErrorMessage('Authentication failed. Please check credentials or try Signing In.');
+      }
     } finally {
       setLoading(false);
     }
