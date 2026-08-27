@@ -1,9 +1,10 @@
 import uuid
 from datetime import datetime, date, timezone
 from typing import Any
-from sqlalchemy import String, Integer, BigInteger, Date, DateTime, ForeignKey
-from sqlalchemy.dialects.postgresql import UUID, JSONB
+from sqlalchemy import String, Integer, BigInteger, Date, DateTime, ForeignKey, JSON
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 
 from app.core.database import Base
 
@@ -18,7 +19,7 @@ class UserGamificationProfile(Base):
     current_streak: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     longest_streak: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     last_activity_date: Mapped[date | None] = mapped_column(Date, nullable=True)
-    unlocked_titles: Mapped[dict[str, Any]] = mapped_column(JSONB, default=list, nullable=False)
+    unlocked_titles: Mapped[dict[str, Any]] = mapped_column(JSON, default=list, nullable=False)
     equipped_title: Mapped[str] = mapped_column(String(100), default="Data Novice", nullable=False)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
@@ -35,7 +36,7 @@ class Achievement(Base):
     icon_name: Mapped[str] = mapped_column(String(100), nullable=False)
     category: Mapped[str] = mapped_column(String(50), nullable=False)
     xp_reward: Mapped[int] = mapped_column(Integer, nullable=False)
-    unlock_condition: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False)
+    unlock_condition: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False)
 
     user_achievements = relationship("UserAchievement", back_populates="achievement", cascade="all, delete-orphan")
 

@@ -1,9 +1,10 @@
 import uuid
 from datetime import datetime, timezone
 from typing import Any
-from sqlalchemy import String, Integer, BigInteger, DateTime, ForeignKey, Text
-from sqlalchemy.dialects.postgresql import UUID, JSONB
+from sqlalchemy import String, Integer, BigInteger, DateTime, ForeignKey, Text, JSON
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 
 from app.core.database import Base
 
@@ -20,7 +21,7 @@ class Dataset(Base):
     file_format: Mapped[str] = mapped_column(String(20), nullable=False)
     row_count: Mapped[int] = mapped_column(Integer, nullable=False)
     column_count: Mapped[int] = mapped_column(Integer, nullable=False)
-    schema_metadata: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False)
+    schema_metadata: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False)
 
     user = relationship("User", back_populates="datasets")
@@ -33,7 +34,7 @@ class DatasetVersion(Base):
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     dataset_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("datasets.id", ondelete="CASCADE"), nullable=False)
     version_number: Mapped[int] = mapped_column(Integer, nullable=False)
-    transformation_log: Mapped[dict[str, Any]] = mapped_column(JSONB, nullable=False)
+    transformation_log: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False)
     file_path: Mapped[str] = mapped_column(String(512), nullable=False)
     row_count: Mapped[int] = mapped_column(Integer, nullable=False)
     column_count: Mapped[int] = mapped_column(Integer, nullable=False)
