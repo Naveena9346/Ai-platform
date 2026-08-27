@@ -25,8 +25,19 @@ async def train_model(
     current_user: Annotated[User, Depends(get_current_user)],
     db: Annotated[AsyncSession, Depends(get_db)]
 ):
-    v_res = await db.execute(select(DatasetVersion).where(DatasetVersion.id == request.dataset_version_id))
-    version = v_res.scalar_one_or_none()
+    ds_ver_id = request.dataset_version_id
+    if isinstance(ds_ver_id, str):
+        try:
+            ds_ver_id = uuid.UUID(ds_ver_id)
+        except ValueError:
+            pass
+
+    v_res = await db.execute(
+        select(DatasetVersion).where(
+            (DatasetVersion.id == ds_ver_id) | (DatasetVersion.dataset_id == ds_ver_id)
+        )
+    )
+    version = v_res.scalars().first()
     if not version:
         raise NotFoundError("DatasetVersion", request.dataset_version_id)
 
@@ -40,9 +51,16 @@ async def train_model(
         request=request
     )
 
+    user_id = current_user.id
+    if isinstance(user_id, str):
+        try:
+            user_id = uuid.UUID(user_id)
+        except ValueError:
+            pass
+
     new_model = MLModel(
         id=model_id,
-        user_id=current_user.id,
+        user_id=user_id,
         dataset_version_id=version.id,
         name=request.model_name,
         algorithm=request.algorithm,
@@ -73,7 +91,7 @@ async def train_model(
         xp_to_award += settings.XP_BASE_HYPEROPT
 
     await GamificationEngine.add_xp_and_update_profile(
-        db, user_id=current_user.id, xp_to_add=xp_to_award
+        db, user_id=user_id, xp_to_add=xp_to_award
     )
 
     result = await db.execute(
@@ -87,7 +105,14 @@ async def list_user_models(
     current_user: Annotated[User, Depends(get_current_user)],
     db: Annotated[AsyncSession, Depends(get_db)]
 ):
+    user_id = current_user.id
+    if isinstance(user_id, str):
+        try:
+            user_id = uuid.UUID(user_id)
+        except ValueError:
+            pass
+
     result = await db.execute(
-        select(MLModel).options(selectinload(MLModel.evaluations)).where(MLModel.user_id == current_user.id)
+        select(MLModel).options(selectinload(MLModel.evaluations)).where(MLModel.user_id == user_id)
     )
     return result.scalars().all()
