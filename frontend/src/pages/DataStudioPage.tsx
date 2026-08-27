@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Upload, Database, BarChart2, CheckCircle, Table } from 'lucide-react';
-import { datasetsApi, edaApi } from '../services/api';
+import { Upload, Table } from 'lucide-react';
+import { datasetsApi } from '../services/api';
 import { Dataset } from '../types';
 
 export const DataStudioPage: React.FC = () => {
   const [datasets, setDatasets] = useState<Dataset[]>([]);
   const [selectedDataset, setSelectedDataset] = useState<Dataset | null>(null);
   const [preview, setPreview] = useState<any>(null);
-  const [edaReport, setEdaReport] = useState<any>(null);
   const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
@@ -26,7 +25,6 @@ export const DataStudioPage: React.FC = () => {
   const selectDataset = (ds: Dataset) => {
     setSelectedDataset(ds);
     datasetsApi.preview(ds.id).then((res) => setPreview(res.data));
-    edaApi.getSummary(ds.id).then((res) => setEdaReport(res.data));
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,7 +32,7 @@ export const DataStudioPage: React.FC = () => {
     setIsUploading(true);
     datasetsApi
       .upload(e.target.files[0])
-      .then((res) => {
+      .then(() => {
         setIsUploading(false);
         loadDatasets();
       })

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Trophy, Award, Flame, Zap, Database, Brain, ArrowUpRight } from 'lucide-react';
+import { Award, Flame, Database, Brain, ArrowUpRight } from 'lucide-react';
 import { gamificationApi, datasetsApi, mlApi } from '../services/api';
 import { useAuthStore } from '../store/useAuthStore';
 

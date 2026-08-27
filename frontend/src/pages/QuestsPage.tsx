@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Award, CheckCircle2, AlertCircle, Zap } from 'lucide-react';
+import { Award } from 'lucide-react';
 import { gamificationApi, mlApi } from '../services/api';
 import { Quest, MLModel } from '../types';
 

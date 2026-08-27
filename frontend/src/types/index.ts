@@ -3,7 +3,7 @@ export interface User {
   username: string;
   email: string;
   role: string;
-  is_active: bool;
+  is_active: boolean;
   created_at: string;
   gamification_profile?: GamificationProfile;
 }
@@ -74,5 +74,5 @@ export interface LeaderboardEntry {
   username: string;
   xp: number;
   level: number;
-  equipped_title: str;
+  equipped_title: string;
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Brain, Play, CheckCircle, Award } from 'lucide-react';
+import { Play, Award } from 'lucide-react';
 import { datasetsApi, mlApi } from '../services/api';
 import { Dataset, MLModel } from '../types';
 
@@ -11,7 +11,6 @@ export const MLStudioPage: React.FC = () => {
   const [algorithm, setAlgorithm] = useState('random_forest');
   const [targetCol, setTargetCol] = useState('');
   const [featureCols, setFeatureCols] = useState<string[]>([]);
-  const [columnsList, setColumnsList] = useState<string[]>([]);
   const [isTraining, setIsTraining] = useState(false);
   const [models, setModels] = useState<MLModel[]>([]);
 
@@ -32,7 +31,6 @@ export const MLStudioPage: React.FC = () => {
   const onDatasetSelect = (id: string) => {
     setSelectedDataset(id);
     datasetsApi.preview(id).then((res) => {
-      setColumnsList(res.data.columns);
       if (res.data.columns.length > 1) {
         setTargetCol(res.data.columns[res.data.columns.length - 1]);
         setFeatureCols(res.data.columns.slice(0, -1));
@@ -189,4 +187,3 @@ export const MLStudioPage: React.FC = () => {
     </div>
   );
 };
-
