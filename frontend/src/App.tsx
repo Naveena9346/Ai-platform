@@ -7,15 +7,15 @@ import { QuestsPage } from './pages/QuestsPage';
 import { LeaderboardPage } from './pages/LeaderboardPage';
 import { useAuthStore } from './store/useAuthStore';
 import { authApi } from './services/api';
-import { Brain, Lock, User as UserIcon, Mail, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
+import { Brain, Lock, User as UserIcon, Mail, ArrowRight, ShieldCheck, Sparkles, Zap } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const { isAuthenticated, setAuth, logout } = useAuthStore();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('naveenadudekula01');
+  const [password, setPassword] = useState('password123');
   const [isRegisterMode, setIsRegisterMode] = useState(false);
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('naveenadudekula01@gmail.com');
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -40,14 +40,13 @@ export const App: React.FC = () => {
         } catch (regErr: any) {
           const detail = regErr?.response?.data?.detail;
           if (detail && typeof detail === 'string' && detail.toLowerCase().includes('already exists')) {
-            // Account exists; attempt seamless login directly
             try {
               const res = await authApi.login(username, password);
               const userRes = await authApi.getMe();
               setAuth(userRes.data, res.data.access_token);
               return;
             } catch {
-              setErrorMessage("This account already exists! Switch to the 'Sign In' tab above to log in.");
+              setErrorMessage("This account already exists! Switch to the 'Sign In' tab or check password.");
               return;
             }
           }
@@ -68,8 +67,29 @@ export const App: React.FC = () => {
       } else if (Array.isArray(detail) && detail.length > 0) {
         setErrorMessage(detail[0]?.msg || 'Validation failed. Please check inputs.');
       } else {
-        setErrorMessage('Authentication failed. Please check credentials or try Signing In.');
+        setErrorMessage('Invalid username or password. Click Demo Sign In below!');
       }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDemoLogin = async () => {
+    setErrorMessage('');
+    setLoading(true);
+    try {
+      try {
+        await authApi.register({
+          username: 'naveenadudekula01',
+          email: 'naveenadudekula01@gmail.com',
+          password: 'password123',
+        });
+      } catch {}
+      const res = await authApi.login('naveenadudekula01', 'password123');
+      const userRes = await authApi.getMe();
+      setAuth(userRes.data, res.data.access_token);
+    } catch {
+      setErrorMessage('Failed to sign in with demo credentials.');
     } finally {
       setLoading(false);
     }
@@ -84,7 +104,7 @@ export const App: React.FC = () => {
         <div className="absolute bottom-1/4 right-1/3 w-96 h-96 bg-purple-600/15 rounded-full blur-3xl pointer-events-none" />
 
         {/* Enterprise Login/Register Card */}
-        <div className="card-panel p-8 sm:p-10 max-w-md w-full relative z-10 space-y-7 border border-slate-800 shadow-2xl">
+        <div className="card-panel p-8 sm:p-10 max-w-md w-full relative z-10 space-y-6 border border-slate-800 shadow-2xl">
           
           {/* Logo & Platform Name */}
           <div className="text-center space-y-3">
@@ -99,6 +119,23 @@ export const App: React.FC = () => {
                 Gamified Enterprise Machine Learning Platform
               </p>
             </div>
+          </div>
+
+          {/* Quick Demo Access Button */}
+          <button
+            type="button"
+            onClick={handleDemoLogin}
+            disabled={loading}
+            className="w-full bg-slate-900 hover:bg-slate-800 border border-indigo-500/30 text-indigo-300 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center space-x-2 transition-all shadow-md shadow-indigo-600/10"
+          >
+            <Zap className="w-4 h-4 text-amber-400 fill-amber-400 animate-pulse" />
+            <span>1-Click Quick Demo Sign In</span>
+          </button>
+
+          <div className="flex items-center space-x-2 text-[10px] text-slate-500 font-semibold uppercase tracking-wider">
+            <div className="h-px bg-slate-800 flex-1" />
+            <span>Or Sign In Below</span>
+            <div className="h-px bg-slate-800 flex-1" />
           </div>
 
           {/* Login / Register Tab Switcher */}

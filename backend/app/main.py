@@ -1,12 +1,14 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
-from app.core.database import engine, Base
+from app.core.database import engine, Base, AsyncSessionLocal
 from app.core.redis import close_redis
 from app.core.logging import setup_logging
 from app.api.v1.router import api_v1_router
+from app.db.init_db import init_db
 
 
 @asynccontextmanager
@@ -17,6 +19,10 @@ async def lifespan(app: FastAPI):
     # Create database tables automatically on startup in development mode
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+
+    # Seed default user and quests
+    async with AsyncSessionLocal() as session:
+        await init_db(session)
 
     yield
 
