@@ -17,11 +17,11 @@ api.interceptors.request.use((config) => {
 
 export const authApi = {
   login: (username: string, password: string) => {
-    const formData = new FormData();
-    formData.append('username', username);
-    formData.append('password', password);
-    return api.post('/auth/login', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+    const params = new URLSearchParams();
+    params.append('username', username);
+    params.append('password', password);
+    return api.post('/auth/login', params, {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     });
   },
   register: (data: { username: string; email: string; password: string }) =>

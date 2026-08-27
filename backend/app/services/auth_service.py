@@ -43,7 +43,9 @@ class AuthService:
 
     @staticmethod
     async def authenticate_user(db: AsyncSession, login_data: UserLogin) -> str:
-        result = await db.execute(select(User).where(User.username == login_data.username))
+        result = await db.execute(
+            select(User).where((User.username == login_data.username) | (User.email == login_data.username))
+        )
         user = result.scalar_one_or_none()
         if not user or not verify_password(login_data.password, user.hashed_password):
             raise AuthenticationError("Invalid username or password")
