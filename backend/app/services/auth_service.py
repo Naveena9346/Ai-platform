@@ -53,3 +53,33 @@ class AuthService:
             raise AuthenticationError("User account is inactive")
 
         return create_access_token(subject=str(user.id))
+
+    @staticmethod
+    async def get_or_create_demo_user(db: AsyncSession) -> str:
+        result = await db.execute(select(User).where(User.username == "naveenadudekula01"))
+        user = result.scalar_one_or_none()
+
+        if not user:
+            user = User(
+                username="naveenadudekula01",
+                email="naveenadudekula01@gmail.com",
+                hashed_password=get_password_hash("password123")
+            )
+            db.add(user)
+            await db.flush()
+
+            profile = UserGamificationProfile(
+                user_id=user.id,
+                xp=250,
+                level=2,
+                points=100,
+                current_streak=3,
+                longest_streak=5,
+                unlocked_titles=["Data Novice", "ML Apprentice"],
+                equipped_title="ML Apprentice"
+            )
+            db.add(profile)
+            await db.commit()
+            await db.refresh(user)
+
+        return create_access_token(subject=str(user.id))

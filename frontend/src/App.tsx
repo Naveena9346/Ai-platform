@@ -78,18 +78,11 @@ export const App: React.FC = () => {
     setErrorMessage('');
     setLoading(true);
     try {
-      try {
-        await authApi.register({
-          username: 'naveenadudekula01',
-          email: 'naveenadudekula01@gmail.com',
-          password: 'password123',
-        });
-      } catch {}
-      const res = await authApi.login('naveenadudekula01', 'password123');
+      const res = await authApi.demoLogin();
       const userRes = await authApi.getMe();
       setAuth(userRes.data, res.data.access_token);
-    } catch {
-      setErrorMessage('Failed to sign in with demo credentials.');
+    } catch (err: any) {
+      setErrorMessage(err?.response?.data?.detail || 'Failed to sign in with demo credentials.');
     } finally {
       setLoading(false);
     }

@@ -26,3 +26,11 @@ async def login(
     login_data = UserLogin(username=form_data.username, password=form_data.password)
     token = await AuthService.authenticate_user(db, login_data)
     return TokenResponse(access_token=token)
+
+
+@router.post("/demo", response_model=TokenResponse)
+async def demo_login(
+    db: Annotated[AsyncSession, Depends(get_db)]
+):
+    token = await AuthService.get_or_create_demo_user(db)
+    return TokenResponse(access_token=token)
