@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: dataquest_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: dataquest_user
+      POSTGRES_PASSWORD: dataquest_password
+      POSTGRES_DB: dataquest_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dataquest_user -d dataquest_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: dataquest_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: dataquest_backend
+    restart: always
+    environment:
+      DATABASE_URL: postgresql+asyncpg://dataquest_user:dataquest_password@postgres:5432/dataquest_db
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY: super_secret_jwt_key_for_dataquest_ai_enterprise
+      ENVIRONMENT: development
+      STORAGE_DIR: /app/data/storage
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app/backend
+      - storage_data:/app/data/storage
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: dataquest_frontend
+    restart: always
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app/frontend
+      - /app/frontend/node_modules
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  redis_data:
+  storage_data:
