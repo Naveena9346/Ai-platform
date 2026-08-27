@@ -84,15 +84,30 @@ async def upload_dataset(
     return result.scalar_one()
 
 
+from app.db.seed_datasets import seed_user_datasets
+
+
 @router.get("", response_model=list[DatasetResponse])
 async def list_datasets(
     current_user: Annotated[User, Depends(get_current_user)],
     db: Annotated[AsyncSession, Depends(get_db)]
 ):
+    user_id = current_user.id
+    if isinstance(user_id, str):
+        try:
+            user_id = uuid.UUID(user_id)
+        except ValueError:
+            pass
+
     result = await db.execute(
-        select(Dataset).options(selectinload(Dataset.versions)).where(Dataset.user_id == current_user.id)
+        select(Dataset).options(selectinload(Dataset.versions)).where(Dataset.user_id == user_id)
     )
-    return result.scalars().all()
+    datasets = list(result.scalars().all())
+
+    if not datasets:
+        datasets = await seed_user_datasets(db, user_id)
+
+    return datasets
 
 
 @router.get("/{dataset_id}", response_model=DatasetPreviewResponse)
@@ -101,7 +116,13 @@ async def preview_dataset(
     current_user: Annotated[User, Depends(get_current_user)],
     db: Annotated[AsyncSession, Depends(get_db)]
 ):
-    result = await db.execute(select(Dataset).where(Dataset.id == dataset_id, Dataset.user_id == current_user.id))
+    user_id = current_user.id
+    if isinstance(user_id, str):
+        try:
+            user_id = uuid.UUID(user_id)
+        except ValueError:
+            pass
+    result = await db.execute(select(Dataset).where(Dataset.id == dataset_id, Dataset.user_id == user_id))
     dataset = result.scalar_one_or_none()
     if not dataset:
         raise NotFoundError("Dataset", dataset_id)

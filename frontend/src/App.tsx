@@ -42,8 +42,10 @@ export const App: React.FC = () => {
           if (detail && typeof detail === 'string' && detail.toLowerCase().includes('already exists')) {
             try {
               const res = await authApi.login(username, password);
-              const userRes = await authApi.getMe();
-              setAuth(userRes.data, res.data.access_token);
+              const token = res.data.access_token;
+              localStorage.setItem('token', token);
+              const userRes = await authApi.getMe(token);
+              setAuth(userRes.data, token);
               return;
             } catch {
               setErrorMessage("This account already exists! Switch to the 'Sign In' tab or check password.");
@@ -53,12 +55,16 @@ export const App: React.FC = () => {
           throw regErr;
         }
         const res = await authApi.login(username, password);
-        const userRes = await authApi.getMe();
-        setAuth(userRes.data, res.data.access_token);
+        const token = res.data.access_token;
+        localStorage.setItem('token', token);
+        const userRes = await authApi.getMe(token);
+        setAuth(userRes.data, token);
       } else {
         const res = await authApi.login(username, password);
-        const userRes = await authApi.getMe();
-        setAuth(userRes.data, res.data.access_token);
+        const token = res.data.access_token;
+        localStorage.setItem('token', token);
+        const userRes = await authApi.getMe(token);
+        setAuth(userRes.data, token);
       }
     } catch (err: any) {
       const detail = err?.response?.data?.detail;
@@ -79,8 +85,10 @@ export const App: React.FC = () => {
     setLoading(true);
     try {
       const res = await authApi.demoLogin();
-      const userRes = await authApi.getMe();
-      setAuth(userRes.data, res.data.access_token);
+      const token = res.data.access_token;
+      localStorage.setItem('token', token);
+      const userRes = await authApi.getMe(token);
+      setAuth(userRes.data, token);
     } catch (err: any) {
       setErrorMessage(err?.response?.data?.detail || 'Failed to sign in with demo credentials.');
     } finally {

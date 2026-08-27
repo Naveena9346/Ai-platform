@@ -27,7 +27,12 @@ export const authApi = {
   demoLogin: () => api.post('/auth/demo'),
   register: (data: { username: string; email: string; password: string }) =>
     api.post('/auth/register', data),
-  getMe: () => api.get('/users/me'),
+  getMe: (token?: string) => {
+    const activeToken = token || localStorage.getItem('token');
+    return api.get('/users/me', {
+      headers: activeToken ? { Authorization: `Bearer ${activeToken}` } : {},
+    });
+  },
 };
 
 export const datasetsApi = {

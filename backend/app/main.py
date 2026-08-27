@@ -1,14 +1,16 @@
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
-from app.core.database import engine, Base, AsyncSessionLocal
+from app.core.database import engine, Base, AsyncSessionLocal, get_db
 from app.core.redis import close_redis
 from app.core.logging import setup_logging
 from app.api.v1.router import api_v1_router
 from app.db.init_db import init_db
+from app.schemas.user import TokenResponse
+from app.services.auth_service import AuthService
 
 
 @asynccontextmanager
@@ -51,6 +53,12 @@ app.add_middleware(
 
 # Register API v1 Router
 app.include_router(api_v1_router, prefix=settings.API_V1_STR)
+
+
+@app.post("/api/v1/auth/demo", response_model=TokenResponse, tags=["Authentication"])
+async def demo_login(db: AsyncSession = Depends(get_db)):
+    token = await AuthService.get_or_create_demo_user(db)
+    return TokenResponse(access_token=token)
 
 
 @app.get("/health", tags=["Health Check"])

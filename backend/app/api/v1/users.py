@@ -1,3 +1,4 @@
+import uuid
 from typing import Annotated
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -17,8 +18,14 @@ async def get_me(
     current_user: Annotated[User, Depends(get_current_user)],
     db: Annotated[AsyncSession, Depends(get_db)]
 ):
+    user_id = current_user.id
+    if isinstance(user_id, str):
+        try:
+            user_id = uuid.UUID(user_id)
+        except ValueError:
+            pass
     result = await db.execute(
-        select(User).options(selectinload(User.gamification_profile)).where(User.id == current_user.id)
+        select(User).options(selectinload(User.gamification_profile)).where(User.id == user_id)
     )
     return result.scalar_one()
 
