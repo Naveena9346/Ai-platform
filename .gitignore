@@ -21,6 +21,7 @@ wheels/
 *.egg
 .pytest_cache/
 .coverage
+coverage.xml
 htmlcov/
 
 # Environments & Virtualenvs
@@ -44,12 +45,11 @@ next-env.d.ts
 *.sqlite3
 *.db
 
-# Environment Variables & Secrets
+# Environment Variables & Secrets Policy
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
+!.env.example
+!example.env
 
 # IDE & OS
 .idea/

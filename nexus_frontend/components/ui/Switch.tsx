@@ -1,0 +1,11 @@
+"use client";
+
+import React from "react";
+
+export function Switch(props: any) {
+  return (
+    <div className="p-3 rounded-xl bg-slate-950/60 border border-white/10 text-xs text-white">
+      <span className="font-bold text-cyan-400">Switch</span> - Toggle switch component for boolean settings.
+    </div>
+  );
+}
