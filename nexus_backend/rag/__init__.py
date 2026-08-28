@@ -1,0 +1,7 @@
+"""
+NexusAI Document Ingestion, Text Chunking & RAG Vector Package.
+"""
+
+from nexus_backend.rag.service import RAGService, rag_service
+
+__all__ = ["RAGService", "rag_service"]
