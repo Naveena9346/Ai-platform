@@ -10,7 +10,7 @@ async def test_openai_provider_generation():
     """
     Test 4: Verify OpenAI Provider text generation contract.
     """
-    provider = OpenAIProvider(api_key="sk-dummy-testing-key")
+    provider = OpenAIProvider(api_key=None)
     res = await provider.generate_text(prompt="What is AI?", model_name="gpt-4o")
 
     assert res.content is not None
