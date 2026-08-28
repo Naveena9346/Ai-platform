@@ -6,8 +6,8 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from nexus_backend.core.config import settings
 
-# Password Hashing Context using bcrypt & argon2
-pwd_context = CryptContext(schemes=["bcrypt", "argon2"], deprecated="auto")
+# Password Hashing Context using pbkdf2_sha256
+pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
 
 def hash_password(password: str) -> str:

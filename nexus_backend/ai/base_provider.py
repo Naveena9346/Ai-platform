@@ -98,7 +98,7 @@ class BaseAIProvider(ABC):
         pass
 
     @abstractmethod
-    async def is_healthy(()) -> bool:
+    async def is_healthy(self) -> bool:
         """
         Check connectivity and active health status of provider endpoint.
         """

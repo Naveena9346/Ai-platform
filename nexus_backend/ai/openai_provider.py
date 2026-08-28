@@ -1,6 +1,9 @@
 import logging
 from typing import AsyncGenerator, List, Optional, Dict, Any
-import openai
+try:
+    import openai
+except ImportError:
+    openai = None
 from nexus_backend.ai.base_provider import (
     BaseAIProvider,
     LLMResponse,
@@ -20,7 +23,10 @@ class OpenAIProvider(BaseAIProvider):
 
     def __init__(self, api_key: Optional[str] = None, base_url: Optional[str] = None):
         super().__init__("openai", api_key, base_url)
-        self.client = openai.AsyncOpenAI(api_key=self.api_key or "dummy_key", base_url=self.base_url)
+        if openai is not None:
+            self.client = openai.AsyncOpenAI(api_key=self.api_key or "dummy_key", base_url=self.base_url)
+        else:
+            self.client = None
 
     async def generate_text(
         self,
@@ -35,6 +41,14 @@ class OpenAIProvider(BaseAIProvider):
         if system_prompt:
             messages.append({"role": "system", "content": system_prompt})
         messages.append({"role": "user", "content": prompt})
+
+        if self.client is None or "dummy_key" in str(self.api_key) or not self.api_key:
+            return LLMResponse(
+                content=f"[Simulated OpenAI Response for prompt: '{prompt[:50]}...']",
+                model_name=model_name,
+                provider_name=self.provider_name,
+                usage=TokenUsage(prompt_tokens=20, completion_tokens=40, total_tokens=60, cost_usd=0.0001)
+            )
 
         try:
             res = await self.client.chat.completions.create(

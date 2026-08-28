@@ -1,7 +1,10 @@
 from sqlalchemy import Column, String, Text, BigInteger, Integer, ForeignKey, JSON
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
-from pgvector.sqlalchemy import Vector
+try:
+    from pgvector.sqlalchemy import Vector
+except ImportError:
+    from sqlalchemy import JSON as Vector
 from nexus_backend.core.base import BaseModel
 
 

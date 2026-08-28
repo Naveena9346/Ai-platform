@@ -1,6 +1,9 @@
 import logging
-from typing import Dict
-import tiktoken
+from typing import Dict, Any
+try:
+    import tiktoken
+except ImportError:
+    tiktoken = None
 
 logger = logging.getLogger("nexus.ai.token_counter")
 
@@ -9,7 +12,7 @@ class TokenCounter:
     """
     Unified Token Count Calculation & Cost Estimator.
     """
-    _encoders: Dict[str, tiktoken.Encoding] = {}
+    _encoders: Dict[str, Any] = {}
 
     @classmethod
     def count_tokens(cls, text: str, model_name: str = "gpt-4o") -> int:
@@ -18,6 +21,8 @@ class TokenCounter:
         """
         if not text:
             return 0
+        if tiktoken is None:
+            return max(1, len(text) // 4)
         try:
             if model_name not in cls._encoders:
                 try:
