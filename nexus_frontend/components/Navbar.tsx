@@ -48,7 +48,7 @@ export default function Navbar() {
               NexusAI Platform
             </span>
             <span className="text-[10px] font-bold uppercase tracking-wider text-cyan-400/80">
-              Enterprise v1.0 • Multi-Provider
+              NexusAI Studio v1.0 • Multi-Provider
             </span>
           </div>
         </a>

@@ -61,7 +61,34 @@ async def get_messages(
     Fetch message history for conversation thread.
     """
     messages = await chat_service.get_recent_messages(db, conversation_id, limit=50)
-    return [{"id": str(m.id), "sender": m.sender, "content": m.content, "tokens": m.tokens_used} for m in messages]
+    return [
+        {
+            "id": str(m.id),
+            "sender": m.sender,
+            "content": m.content,
+            "tokens": m.tokens_used,
+            "cost": float(m.cost or 0.0),
+            "meta": m.meta or {}
+        }
+        for m in messages
+    ]
+
+
+@router.delete("/conversations/{conversation_id}")
+async def delete_conversation(
+    conversation_id: str,
+    db: AsyncSession = Depends(get_db_session),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Delete a conversation thread and its messages.
+    """
+    res = await db.execute(select(Conversation).where(Conversation.id == conversation_id))
+    conv = res.scalars().first()
+    if conv:
+        await db.delete(conv)
+        await db.commit()
+    return {"status": "success", "deleted_id": conversation_id}
 
 
 @router.post("/conversations/{conversation_id}/send")
@@ -90,5 +117,9 @@ async def send_chat_message(
         "conversation_id": conversation_id,
         "reply": reply.content,
         "tokens_used": reply.tokens_used,
-        "cost": float(reply.cost)
+        "cost": float(reply.cost),
+        "meta": reply.meta or {},
+        "provider": reply.meta.get("provider", payload.preferred_provider),
+        "model": reply.meta.get("model", payload.preferred_model),
+        "is_live_api": reply.meta.get("is_live_api", False)
     }

@@ -1,7 +1,6 @@
 from sqlalchemy import Column, String, Boolean, Text, Integer, ForeignKey, JSON
 from sqlalchemy.orm import relationship
-from sqlalchemy.dialects.postgresql import UUID
-from nexus_backend.core.base import BaseModel
+from nexus_backend.core.base import BaseModel, GUID
 
 
 class AIWorkflow(BaseModel):
@@ -10,7 +9,7 @@ class AIWorkflow(BaseModel):
     """
     __tablename__ = "ai_workflows"
 
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(GUID(), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     name = Column(String(200), nullable=False)
     description = Column(Text, nullable=True)
     dag_structure = Column(JSON, nullable=False)  # nodes & edges configuration
@@ -27,8 +26,8 @@ class WorkflowExecution(BaseModel):
     """
     __tablename__ = "workflow_executions"
 
-    workflow_id = Column(UUID(as_uuid=True), ForeignKey("ai_workflows.id", ondelete="CASCADE"), nullable=False)
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    workflow_id = Column(GUID(), ForeignKey("ai_workflows.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(GUID(), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     status = Column(String(30), default="pending", nullable=False)  # pending, running, completed, failed
     execution_time_ms = Column(Integer, nullable=True)
     input_data = Column(JSON, nullable=True)

@@ -22,6 +22,7 @@ class LLMResponse(BaseModel):
     provider_name: str
     usage: TokenUsage
     finish_reason: str = "stop"
+    is_live_api: bool = False
     raw_response: Optional[Dict[str, Any]] = None
 
 

@@ -1,6 +1,5 @@
 from sqlalchemy import Column, String, Boolean, Text, Numeric, Integer, ForeignKey, JSON
-from sqlalchemy.dialects.postgresql import UUID
-from nexus_backend.core.base import BaseModel
+from nexus_backend.core.base import BaseModel, GUID
 
 
 class ApiUsageLog(BaseModel):
@@ -9,7 +8,7 @@ class ApiUsageLog(BaseModel):
     """
     __tablename__ = "api_usage_logs"
 
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
+    user_id = Column(GUID(), ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True)
     endpoint = Column(String(255), nullable=False)
     model_name = Column(String(100), nullable=True)
     prompt_tokens = Column(Integer, default=0, nullable=False)
@@ -26,7 +25,7 @@ class AuditLog(BaseModel):
     """
     __tablename__ = "audit_logs"
 
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    user_id = Column(GUID(), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     action = Column(String(100), nullable=False)  # USER_LOGIN, MODEL_CREATED, PROMPT_DELETED
     resource_type = Column(String(50), nullable=False)
     resource_id = Column(String(100), nullable=True)
@@ -40,7 +39,7 @@ class Notification(BaseModel):
     """
     __tablename__ = "notifications"
 
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    user_id = Column(GUID(), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     title = Column(String(200), nullable=False)
     message = Column(Text, nullable=False)
     type = Column(String(50), default="info", nullable=False)  # info, level_up, achievement, mission

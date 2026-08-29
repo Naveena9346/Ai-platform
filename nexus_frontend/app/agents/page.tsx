@@ -43,7 +43,7 @@ export default function AgentStudio() {
           <span>Autonomous ReAct Agent Studio</span>
         </h1>
         <p className="text-gray-400 text-sm mt-1">
-          Deploy autonomous agents with self-reasoning loops (Thought -> Action -> Observation -> Final Answer) equipped with extensible tools (+150 XP).
+          Deploy autonomous agents with self-reasoning loops (Thought &rarr; Action &rarr; Observation &rarr; Final Answer) equipped with extensible tools (+150 XP).
         </p>
       </div>
 

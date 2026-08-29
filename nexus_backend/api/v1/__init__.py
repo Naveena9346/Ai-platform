@@ -9,6 +9,7 @@ from nexus_backend.api.v1.agents import router as agents_router
 from nexus_backend.api.v1.gamification import router as gamification_router
 from nexus_backend.api.v1.analytics import router as analytics_router
 from nexus_backend.api.v1.admin import router as admin_router
+from nexus_backend.api.v1.humanizer import humanizer_router
 
 api_v1_router = APIRouter()
 
@@ -21,3 +22,5 @@ api_v1_router.include_router(agents_router)
 api_v1_router.include_router(gamification_router)
 api_v1_router.include_router(analytics_router)
 api_v1_router.include_router(admin_router)
+api_v1_router.include_router(humanizer_router)
+

@@ -10,9 +10,15 @@ from nexus_backend.core.exceptions import ResourceNotFoundError
 logger = logging.getLogger("nexus.chat.service")
 
 
+from nexus_backend.services.language_detector import language_detector
+from nexus_backend.services.intent_detector import intent_detector
+from nexus_backend.services.context_manager import context_manager
+from nexus_backend.services.response_validator import response_validator
+
+
 class ChatService:
     """
-    Chat Thread Persistence, Context Sliding Memory Manager, and Conversation Service.
+    Chat Thread Persistence, Context Memory Pipeline Manager, and Conversation Service.
     """
 
     async def create_conversation(
@@ -85,40 +91,85 @@ class ChatService:
         preferred_model: str = "gpt-4o"
     ) -> ChatMessage:
         """
-        Store user message, call AI Model Router, store assistant reply, and track tokens.
+        Execute Pipeline: Language Detect -> Intent Detect -> History Fetch -> LLM Route -> Response Validate -> Save DB.
         """
         conv_res = await db.execute(select(Conversation).where(Conversation.id == conversation_id))
         conv = conv_res.scalars().first()
         if not conv:
             raise ResourceNotFoundError("Conversation", conversation_id)
 
-        # 1. Store User Message
+        # 1. Fetch Past Messages History (Conversation Memory)
+        recent_db_messages = await self.get_recent_messages(db, conversation_id, limit=10)
+        messages_history = [{"role": "user" if m.sender == "user" else "assistant", "content": m.content} for m in recent_db_messages]
+
+        # 2. Language & Intent Detection
+        lang_res = language_detector.detect_language(user_message_text)
+        intent_res = intent_detector.detect_intent(user_message_text, past_messages=messages_history)
+
+        # 3. Store User Message
         user_tokens = TokenCounter.count_tokens(user_message_text, preferred_model)
         await self.add_message(
             db=db,
             conversation_id=conversation_id,
             sender="user",
             content=user_message_text,
-            tokens_used=user_tokens
+            tokens_used=user_tokens,
+            meta={"language": lang_res.language, "intent": intent_res.intent}
         )
 
-        # 2. Get AI Model Response
+        # 4. Build Context System Prompt
+        system_instruction = context_manager.build_system_instruction(
+            lang_res=lang_res,
+            intent_res=intent_res,
+            custom_system_prompt=conv.system_prompt
+        )
+
+        # 5. Route LLM Generation with Full History Memory
         response = await model_router.route_generate_text(
             prompt=user_message_text,
             preferred_provider=preferred_provider,
             preferred_model=preferred_model,
-            system_prompt=conv.system_prompt
+            system_prompt=system_instruction,
+            messages_history=messages_history
         )
 
-        # 3. Store Assistant Message
+        # 6. Response Validation Check
+        val_res = response_validator.validate_response(
+            user_prompt=user_message_text,
+            response_text=response.content,
+            lang_res=lang_res,
+            intent_res=intent_res,
+            past_messages=messages_history
+        )
+
+        final_content = response.content
+        if not val_res.is_valid and val_res.suggested_fix == "conversational_greeting":
+            from nexus_backend.ai.smart_responder import smart_responder
+            final_content = smart_responder.generate_smart_response(
+                prompt=user_message_text,
+                messages_history=messages_history,
+                model_name=preferred_model,
+                provider_name=preferred_provider,
+                lang_res=lang_res,
+                intent_res=intent_res
+            )
+
+        # 7. Store Assistant Response Message
         assistant_msg = await self.add_message(
             db=db,
             conversation_id=conversation_id,
             sender="assistant",
-            content=response.content,
+            content=final_content,
             tokens_used=response.usage.total_tokens,
             cost=response.usage.cost_usd,
-            meta={"provider": response.provider_name, "model": response.model_name}
+            meta={
+                "provider": response.provider_name,
+                "model": response.model_name,
+                "is_live_api": getattr(response, "is_live_api", False),
+                "language": lang_res.language,
+                "intent": intent_res.intent,
+                "validation_passed": val_res.is_valid
+            }
         )
 
         return assistant_msg
