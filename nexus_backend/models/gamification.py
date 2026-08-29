@@ -1,7 +1,6 @@
 from sqlalchemy import Column, String, Boolean, Text, BigInteger, Integer, Date, ForeignKey, JSON
 from sqlalchemy.orm import relationship
-from sqlalchemy.dialects.postgresql import UUID
-from nexus_backend.core.base import BaseModel
+from nexus_backend.core.base import BaseModel, GUID
 
 
 class GamificationProfile(BaseModel):
@@ -10,7 +9,7 @@ class GamificationProfile(BaseModel):
     """
     __tablename__ = "gamification_profiles"
 
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, unique=True)
+    user_id = Column(GUID(), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, unique=True)
     xp_points = Column(BigInteger, default=0, nullable=False)
     current_level = Column(Integer, default=1, nullable=False)
     reward_coins = Column(Integer, default=0, nullable=False)
@@ -49,8 +48,8 @@ class UserAchievement(BaseModel):
     """
     __tablename__ = "user_achievements"
 
-    gamification_profile_id = Column(UUID(as_uuid=True), ForeignKey("gamification_profiles.id", ondelete="CASCADE"), nullable=False)
-    achievement_id = Column(UUID(as_uuid=True), ForeignKey("achievements.id", ondelete="CASCADE"), nullable=False)
+    gamification_profile_id = Column(GUID(), ForeignKey("gamification_profiles.id", ondelete="CASCADE"), nullable=False)
+    achievement_id = Column(GUID(), ForeignKey("achievements.id", ondelete="CASCADE"), nullable=False)
     unlocked_at = Column(Text, nullable=True)
 
     # Relationships
@@ -82,8 +81,8 @@ class UserMission(BaseModel):
     """
     __tablename__ = "user_missions"
 
-    gamification_profile_id = Column(UUID(as_uuid=True), ForeignKey("gamification_profiles.id", ondelete="CASCADE"), nullable=False)
-    mission_id = Column(UUID(as_uuid=True), ForeignKey("missions.id", ondelete="CASCADE"), nullable=False)
+    gamification_profile_id = Column(GUID(), ForeignKey("gamification_profiles.id", ondelete="CASCADE"), nullable=False)
+    mission_id = Column(GUID(), ForeignKey("missions.id", ondelete="CASCADE"), nullable=False)
     current_progress = Column(Integer, default=0, nullable=False)
     is_completed = Column(Boolean, default=False, nullable=False)
     claimed_at = Column(Text, nullable=True)

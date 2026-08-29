@@ -1,7 +1,6 @@
 from sqlalchemy import Column, String, Boolean, Text, Integer, ForeignKey, JSON
 from sqlalchemy.orm import relationship
-from sqlalchemy.dialects.postgresql import UUID
-from nexus_backend.core.base import BaseModel
+from nexus_backend.core.base import BaseModel, GUID
 
 
 class PromptTemplate(BaseModel):
@@ -10,7 +9,7 @@ class PromptTemplate(BaseModel):
     """
     __tablename__ = "prompt_templates"
 
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(GUID(), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     title = Column(String(200), nullable=False, index=True)
     description = Column(Text, nullable=True)
     category = Column(String(50), default="general", nullable=False)  # coding, writing, analysis, agent
@@ -27,7 +26,7 @@ class PromptVersion(BaseModel):
     """
     __tablename__ = "prompt_versions"
 
-    template_id = Column(UUID(as_uuid=True), ForeignKey("prompt_templates.id", ondelete="CASCADE"), nullable=False)
+    template_id = Column(GUID(), ForeignKey("prompt_templates.id", ondelete="CASCADE"), nullable=False)
     version_number = Column(Integer, nullable=False)
     system_message = Column(Text, nullable=True)
     user_template = Column(Text, nullable=False)

@@ -24,6 +24,7 @@ export default function Sidebar() {
   const mainNav = [
     { name: "Overview Dashboard", href: "/", icon: LayoutDashboard, badge: "Live" },
     { name: "AI Chat Studio", href: "/chat", icon: MessageSquare, badge: "Streaming" },
+    { name: "AI Text Humanizer", href: "/humanizer", icon: ShieldCheck, badge: "Bypass AI" },
     { name: "Prompt Templates", href: "/prompts", icon: Sparkles },
     { name: "Document RAG Engine", href: "/documents", icon: FileText, badge: "pgvector" },
   ];

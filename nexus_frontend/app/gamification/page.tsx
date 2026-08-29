@@ -18,6 +18,24 @@ export default function GamificationHub() {
     { rank: 3, email: "demo@nexus.ai", xp_points: 1250, level: 4 },
   ]);
 
+  useEffect(() => {
+    fetch("/api/v1/gamification/summary")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.current_level) setSummary(data);
+      })
+      .catch(() => {});
+
+    fetch("/api/v1/gamification/leaderboard")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.rankings && data.rankings.length > 0) {
+          setLeaderboard(data.rankings);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <div className="space-y-8">
       <div>

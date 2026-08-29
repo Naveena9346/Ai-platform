@@ -84,14 +84,14 @@ export default function Dashboard() {
         <div className="relative z-10 max-w-3xl space-y-4">
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-xs font-bold text-cyan-300">
             <Sparkles className="w-3.5 h-3.5 animate-pulse" />
-            <span>Enterprise Multi-Provider AI Platform</span>
+            <span>NexusAI Platform • Multi-Provider AI Studio</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-black tracking-tight text-white leading-tight">
-            Real-Time AI Orchestration <br />
-            <span className="gradient-text">& Event-Driven Gamification</span>
+            NexusAI Platform <br />
+            <span className="gradient-text">Real-Time AI & Gamification Engine</span>
           </h1>
           <p className="text-gray-300 text-sm md:text-base leading-relaxed">
-            Execute LLMs across 5 providers, orchestrate visual DAG workflows, launch autonomous ReAct tools, ingest vector RAG documents, and level up on your daily quest board.
+            Execute LLMs across 5 providers (OpenAI, Gemini, Claude, Ollama, HuggingFace), orchestrate visual DAG workflows, launch autonomous ReAct tools, ingest vector RAG documents, and level up on your daily quest board.
           </p>
           <div className="flex flex-wrap gap-4 pt-2">
             <a

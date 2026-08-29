@@ -1,7 +1,6 @@
 from sqlalchemy import Column, String, Text, Numeric, Integer, ForeignKey, JSON
 from sqlalchemy.orm import relationship
-from sqlalchemy.dialects.postgresql import UUID
-from nexus_backend.core.base import BaseModel
+from nexus_backend.core.base import BaseModel, GUID
 
 
 class Conversation(BaseModel):
@@ -10,8 +9,8 @@ class Conversation(BaseModel):
     """
     __tablename__ = "conversations"
 
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    model_id = Column(UUID(as_uuid=True), ForeignKey("ai_models.id", ondelete="SET NULL"), nullable=True)
+    user_id = Column(GUID(), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    model_id = Column(GUID(), ForeignKey("ai_models.id", ondelete="SET NULL"), nullable=True)
     title = Column(String(200), default="New Conversation", nullable=False)
     system_prompt = Column(Text, nullable=True)
     summary = Column(Text, nullable=True)
@@ -28,7 +27,7 @@ class ChatMessage(BaseModel):
     """
     __tablename__ = "chat_messages"
 
-    conversation_id = Column(UUID(as_uuid=True), ForeignKey("conversations.id", ondelete="CASCADE"), nullable=False)
+    conversation_id = Column(GUID(), ForeignKey("conversations.id", ondelete="CASCADE"), nullable=False)
     sender = Column(String(20), nullable=False)  # user, assistant, system, tool
     content = Column(Text, nullable=False)
     tokens_used = Column(Integer, default=0, nullable=False)

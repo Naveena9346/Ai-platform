@@ -1,4 +1,5 @@
 import logging
+import os
 from typing import AsyncGenerator
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
@@ -11,16 +12,16 @@ from nexus_backend.core.config import settings
 
 logger = logging.getLogger("nexus.database")
 
-# Create Async Engine for PostgreSQL
+# Default to SQLite local DB if PostgreSQL is not locally listening
+SQLITE_URL = "sqlite+aiosqlite:///./nexus_local.db"
+
+# Create Engine
 engine: AsyncEngine = create_async_engine(
-    settings.DATABASE_URL,
-    echo=settings.DB_ECHO,
-    pool_size=settings.DB_POOL_SIZE,
-    max_overflow=settings.DB_MAX_OVERFLOW,
+    SQLITE_URL if "sqlite" in settings.DATABASE_URL.lower() else settings.DATABASE_URL,
+    echo=False,
     future=True,
 )
 
-# Async Session Factory
 async_session_factory = async_sessionmaker(
     bind=engine,
     class_=AsyncSession,
@@ -41,6 +42,7 @@ async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
     """
     FastAPI Dependency yielding async database session within transaction boundary.
     """
+    global async_session_factory
     async with async_session_factory() as session:
         try:
             yield session
@@ -55,11 +57,26 @@ async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
 
 async def init_db_schema():
     """
-    Initialize database schema tables asynchronously (useful for development/testing).
+    Initialize database schema tables asynchronously with SQLite fallback if PostgreSQL is unavailable.
     """
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-    logger.info("Database tables initialized successfully.")
+    global engine, async_session_factory
+    try:
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        logger.info("Database tables initialized successfully.")
+    except Exception as e:
+        logger.warning(f"Primary database connection unavailable ({e}). Re-initializing SQLite local database...")
+        engine = create_async_engine(SQLITE_URL, echo=False, future=True)
+        async_session_factory = async_sessionmaker(
+            bind=engine,
+            class_=AsyncSession,
+            expire_on_commit=False,
+            autoflush=False,
+            autocommit=False,
+        )
+        async with engine.begin() as conn:
+            await conn.run_sync(Base.metadata.create_all)
+        logger.info("SQLite local database initialized successfully.")
 
 
 async def close_db_engine():

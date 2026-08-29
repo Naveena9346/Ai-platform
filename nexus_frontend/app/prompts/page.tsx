@@ -73,7 +73,7 @@ export default function PromptStudio() {
     }
   };
 
-  const handleCopy = (id: string, text: str) => {
+  const handleCopy = (id: string, text: string) => {
     navigator.clipboard.writeText(text);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
@@ -88,7 +88,7 @@ export default function PromptStudio() {
             <span>Prompt Templates & Versioning Studio</span>
           </h1>
           <p className="text-gray-400 text-sm mt-1">
-            Create reusable prompt templates with variable placeholders `{{ variable }}` and Jinja2 rendering.
+            Create reusable prompt templates with variable placeholders `{"{{ variable }}"}` and Jinja2 rendering.
           </p>
         </div>
       </div>

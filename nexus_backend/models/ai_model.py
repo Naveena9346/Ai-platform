@@ -1,7 +1,6 @@
 from sqlalchemy import Column, String, Boolean, Text, Numeric, Integer, ForeignKey, JSON
 from sqlalchemy.orm import relationship
-from sqlalchemy.dialects.postgresql import UUID
-from nexus_backend.core.base import BaseModel
+from nexus_backend.core.base import BaseModel, GUID
 
 
 class AIProvider(BaseModel):
@@ -26,7 +25,7 @@ class AIModel(BaseModel):
     """
     __tablename__ = "ai_models"
 
-    provider_id = Column(UUID(as_uuid=True), ForeignKey("ai_providers.id", ondelete="CASCADE"), nullable=False)
+    provider_id = Column(GUID(), ForeignKey("ai_providers.id", ondelete="CASCADE"), nullable=False)
     model_name = Column(String(100), nullable=False, index=True)  # gpt-4o, gemini-1.5-flash, claude-3-5-sonnet
     display_name = Column(String(100), nullable=False)
     context_window = Column(Integer, default=8192, nullable=False)

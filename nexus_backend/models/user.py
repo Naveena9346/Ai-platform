@@ -1,7 +1,6 @@
 from sqlalchemy import Column, String, Boolean, Text, ForeignKey, JSON
 from sqlalchemy.orm import relationship
-from sqlalchemy.dialects.postgresql import UUID
-from nexus_backend.core.base import BaseModel
+from nexus_backend.core.base import BaseModel, GUID
 
 
 class User(BaseModel):
@@ -32,7 +31,7 @@ class UserProfile(BaseModel):
     """
     __tablename__ = "user_profiles"
 
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, unique=True)
+    user_id = Column(GUID(), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, unique=True)
     avatar_url = Column(Text, nullable=True)
     bio = Column(Text, nullable=True)
     theme_preference = Column(String(20), default="dark", nullable=False)

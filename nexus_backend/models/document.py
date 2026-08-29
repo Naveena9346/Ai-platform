@@ -1,11 +1,10 @@
 from sqlalchemy import Column, String, Text, BigInteger, Integer, ForeignKey, JSON
 from sqlalchemy.orm import relationship
-from sqlalchemy.dialects.postgresql import UUID
 try:
     from pgvector.sqlalchemy import Vector
 except ImportError:
     from sqlalchemy import JSON as Vector
-from nexus_backend.core.base import BaseModel
+from nexus_backend.core.base import BaseModel, GUID
 
 
 class Document(BaseModel):
@@ -14,7 +13,7 @@ class Document(BaseModel):
     """
     __tablename__ = "documents"
 
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(GUID(), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     filename = Column(String(255), nullable=False)
     file_type = Column(String(50), nullable=False)  # pdf, docx, csv, txt, md
     file_size_bytes = Column(BigInteger, nullable=False)
@@ -33,7 +32,7 @@ class DocumentChunk(BaseModel):
     """
     __tablename__ = "document_chunks"
 
-    document_id = Column(UUID(as_uuid=True), ForeignKey("documents.id", ondelete="CASCADE"), nullable=False)
+    document_id = Column(GUID(), ForeignKey("documents.id", ondelete="CASCADE"), nullable=False)
     chunk_index = Column(Integer, nullable=False)
     content = Column(Text, nullable=False)
     embedding = Column(Vector(1536), nullable=True)  # 1536-dimensional vector for OpenAI / standard RAG
