@@ -1,0 +1,181 @@
+age,sex,chest_pain_type,resting_bp,cholesterol,max_hr,heart_disease
+35,0,Typical Angina,175,354,170,0
+59,1,Asymptomatic,102,454,124,1
+50,0,Asymptomatic,180,298,78,1
+35,1,Atypical Angina,96,153,140,0
+72,1,Typical Angina,121,435,135,1
+64,0,Asymptomatic,192,138,127,1
+77,1,Atypical Angina,103,178,114,0
+75,0,Atypical Angina,139,138,172,0
+52,1,Atypical Angina,174,481,201,0
+75,1,Typical Angina,105,307,186,1
+52,0,Non-anginal,118,353,192,0
+54,1,Typical Angina,177,244,86,0
+75,0,Asymptomatic,185,311,97,1
+70,0,Non-anginal,187,358,103,1
+35,1,Typical Angina,105,141,113,0
+64,0,Non-anginal,193,236,121,0
+37,1,Non-anginal,101,350,115,0
+50,0,Asymptomatic,197,320,168,1
+62,1,Typical Angina,172,249,74,1
+54,1,Typical Angina,98,437,166,0
+48,1,Non-anginal,108,413,98,0
+50,0,Typical Angina,152,215,176,0
+54,0,Atypical Angina,138,464,81,0
+41,0,Asymptomatic,197,193,165,1
+56,0,Non-anginal,158,174,122,0
+66,1,Atypical Angina,153,182,117,0
+59,0,Atypical Angina,119,366,184,1
+33,1,Asymptomatic,198,373,124,1
+61,1,Atypical Angina,120,351,85,1
+60,0,Atypical Angina,114,171,108,0
+50,1,Atypical Angina,171,327,116,0
+41,0,Atypical Angina,96,131,163,0
+36,1,Typical Angina,126,334,145,0
+41,1,Non-anginal,188,281,140,0
+69,1,Asymptomatic,192,377,118,1
+54,1,Typical Angina,169,264,171,0
+53,1,Non-anginal,180,436,172,0
+46,1,Atypical Angina,97,233,185,0
+57,0,Typical Angina,191,398,177,1
+71,0,Asymptomatic,159,543,78,1
+41,1,Asymptomatic,187,477,164,1
+29,0,Non-anginal,174,312,154,0
+52,1,Atypical Angina,186,211,114,0
+37,0,Atypical Angina,129,226,174,0
+30,0,Asymptomatic,141,216,92,1
+65,0,Typical Angina,186,489,80,1
+64,0,Atypical Angina,120,159,199,0
+60,0,Typical Angina,164,366,137,1
+48,1,Typical Angina,187,288,169,0
+77,0,Non-anginal,183,331,87,1
+46,0,Asymptomatic,186,306,161,1
+46,1,Typical Angina,94,183,179,0
+48,1,Non-anginal,103,440,111,0
+69,0,Atypical Angina,158,526,92,1
+62,1,Typical Angina,134,346,138,1
+33,1,Non-anginal,149,560,169,0
+40,1,Non-anginal,112,234,117,0
+35,1,Asymptomatic,98,530,93,1
+70,1,Non-anginal,186,517,111,1
+76,0,Asymptomatic,196,171,138,1
+43,0,Typical Angina,94,320,181,0
+52,0,Asymptomatic,156,314,94,1
+52,1,Asymptomatic,160,415,186,1
+51,0,Typical Angina,188,379,132,0
+69,0,Typical Angina,153,179,140,0
+65,0,Atypical Angina,133,516,173,1
+66,0,Typical Angina,177,128,198,0
+50,0,Asymptomatic,185,457,108,1
+64,0,Typical Angina,162,522,157,1
+58,1,Typical Angina,118,237,196,0
+76,0,Non-anginal,193,164,86,0
+50,0,Atypical Angina,114,366,86,0
+59,1,Atypical Angina,125,287,79,1
+45,0,Asymptomatic,103,339,87,1
+32,1,Asymptomatic,118,248,171,1
+66,0,Typical Angina,156,342,121,1
+64,0,Typical Angina,181,319,174,1
+43,1,Non-anginal,163,126,192,0
+67,0,Atypical Angina,150,206,143,0
+41,1,Atypical Angina,177,433,73,0
+45,0,Typical Angina,169,493,179,0
+29,0,Non-anginal,183,396,170,0
+60,1,Asymptomatic,161,527,183,1
+47,0,Asymptomatic,128,203,128,1
+61,1,Atypical Angina,154,372,129,1
+57,0,Atypical Angina,190,558,153,1
+29,0,Non-anginal,173,515,83,0
+76,1,Atypical Angina,192,272,150,1
+71,1,Typical Angina,113,220,72,0
+50,0,Typical Angina,194,453,77,0
+42,1,Non-anginal,160,239,86,0
+47,0,Atypical Angina,173,453,194,0
+61,0,Asymptomatic,146,456,97,1
+40,0,Atypical Angina,190,130,127,0
+56,1,Typical Angina,152,158,132,0
+76,0,Non-anginal,179,322,193,1
+30,1,Non-anginal,132,414,154,0
+35,0,Non-anginal,107,340,198,0
+57,1,Asymptomatic,122,405,152,1
+38,0,Typical Angina,101,343,132,0
+57,1,Typical Angina,159,131,128,0
+33,1,Atypical Angina,134,207,141,0
+31,1,Atypical Angina,182,416,72,0
+52,1,Atypical Angina,115,279,109,0
+55,0,Non-anginal,195,145,111,0
+48,1,Non-anginal,177,492,136,0
+58,0,Atypical Angina,115,448,97,1
+38,0,Typical Angina,189,173,140,0
+69,0,Asymptomatic,152,383,135,1
+47,1,Typical Angina,103,434,149,0
+50,0,Asymptomatic,114,504,92,1
+64,1,Atypical Angina,118,409,183,1
+73,1,Non-anginal,142,262,153,1
+29,1,Asymptomatic,166,362,116,1
+70,1,Asymptomatic,99,301,144,1
+55,1,Atypical Angina,128,369,155,0
+53,1,Non-anginal,108,257,163,0
+37,0,Atypical Angina,112,373,162,0
+45,0,Typical Angina,134,295,109,0
+77,0,Non-anginal,189,561,117,1
+61,0,Atypical Angina,162,424,104,1
+68,0,Typical Angina,143,443,128,1
+61,0,Asymptomatic,175,219,118,1
+38,1,Atypical Angina,112,289,133,0
+41,1,Atypical Angina,96,483,135,0
+55,1,Asymptomatic,144,334,143,1
+34,0,Typical Angina,132,494,98,0
+61,1,Typical Angina,102,463,126,1
+49,1,Typical Angina,151,488,193,0
+66,1,Asymptomatic,129,239,177,1
+65,0,Asymptomatic,111,479,133,1
+50,1,Non-anginal,151,310,74,0
+50,1,Non-anginal,154,488,124,0
+52,1,Asymptomatic,172,254,125,1
+31,1,Atypical Angina,94,227,108,0
+49,1,Typical Angina,98,327,162,0
+49,1,Non-anginal,160,234,117,0
+48,0,Non-anginal,161,194,199,0
+32,1,Asymptomatic,120,437,93,1
+53,0,Typical Angina,156,503,122,0
+52,0,Typical Angina,148,427,102,0
+60,0,Asymptomatic,199,302,176,1
+67,1,Typical Angina,178,442,76,1
+73,0,Non-anginal,115,550,188,1
+33,1,Non-anginal,174,201,127,0
+50,0,Typical Angina,130,212,116,0
+75,1,Non-anginal,138,526,174,1
+49,1,Typical Angina,99,233,88,0
+58,1,Atypical Angina,126,539,196,1
+71,1,Atypical Angina,171,247,185,1
+64,1,Typical Angina,199,153,81,0
+42,0,Non-anginal,140,371,197,0
+47,1,Non-anginal,121,277,142,0
+71,0,Typical Angina,140,414,89,1
+31,1,Asymptomatic,140,538,168,1
+41,1,Typical Angina,127,218,118,0
+77,0,Asymptomatic,154,538,109,1
+52,1,Typical Angina,164,394,139,0
+54,0,Non-anginal,100,439,119,0
+67,0,Typical Angina,155,142,95,0
+31,0,Typical Angina,125,407,194,0
+44,0,Atypical Angina,121,198,190,0
+29,0,Typical Angina,179,461,178,0
+69,0,Atypical Angina,122,464,85,1
+31,0,Typical Angina,139,155,127,0
+68,1,Non-anginal,141,319,92,1
+34,1,Non-anginal,150,485,106,0
+43,1,Asymptomatic,150,174,152,1
+30,0,Typical Angina,172,145,193,0
+70,0,Non-anginal,176,128,134,0
+68,0,Non-anginal,155,257,130,1
+39,1,Non-anginal,189,472,200,0
+77,0,Asymptomatic,124,249,131,1
+43,1,Typical Angina,129,261,128,0
+65,1,Typical Angina,155,420,128,1
+45,0,Typical Angina,176,317,114,0
+57,0,Non-anginal,185,390,197,1
+56,1,Typical Angina,151,526,201,1
+49,1,Atypical Angina,129,370,132,0
+70,1,Atypical Angina,154,394,81,1
